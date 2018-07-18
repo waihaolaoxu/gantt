@@ -2,165 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>掌中墨斗甘特图</title>
+    <title>dhtmlx甘特图</title>
     <link rel="stylesheet" type="text/css" href="codebase/dhtmlxgantt.css">
     <script src="codebase/dhtmlxgantt.js"></script>
     <script src="codebase/locale/locale_cn.js"></script>
     <script src="codebase/ext/dhtmlxgantt_tooltip.js"></script>
-    <!-- <script src="codebase/ext/dhtmlxgantt_smart_rendering.js"></script> -->
     <script src="codebase/ext/dhtmlxgantt_marker.js"></script>
-
-    <style type="text/css">
-        html, body {
-            height: 100%;
-            padding: 0px;
-            margin: 0px;
-        }
-        #gantt_here{
-            width:60%;
-            height: 80%;
-            margin:2% auto;
-        }
-        .status_line {
-            background-color: #0ca30a;
-        }
-    </style>
+    <!-- <script src="codebase/ext/dhtmlxgantt_smart_rendering.js"></script> -->
+    
+    <!-- my -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
+    <div class="filter">
+        <select onchange="fn.startType(this)">
+            <option value="0">周末施工</option>
+            <option value="1">周末不施工</option>
+        </select>
+    </div>
     <div id="gantt_here"></div>
-    <script src="testdata.js"></script>
-    <script>
-    gantt.message("Try to move or resize task to not working time");
+    <script src="js/template.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/testdata.js"></script>
+    <script src="js/main.js"></script>
 
-    gantt.config.work_time = true;//
-    gantt.config.correct_work_time = true;//工作日
-    gantt.config.scale_unit = "day"; //表头日期类型
-    gantt.config.date_scale = "%d";//表头日期显示
-    gantt.config.min_column_width = 60;//单元格最小宽度
-    gantt.config.duration_unit = "day";
-    gantt.config.scale_height = 26*2; //表头高度
-    gantt.config.row_height = 26; //行高
-
-    // 任务弹层配置
-    gantt.templates.lightbox_header = function(start_date,end_date,task){
-        return '编辑'
-        // return gantt.templates.task_time(task.start_date, task.end_date, task)  +  "&nbsp;" +
-        // (gantt.templates.task_text(task.start_date, task.end_date, task) || "").substr(0, 70);
-    };
-    gantt.config.lightbox.sections = [
-        {name:"description", height:40, map_to:"text", type:"textarea", focus:true},
-        {name: "type", type: "typeselect", map_to: "type"},                             
-        {name: "time",height:40,type: "duration", map_to: "auto"}
-    ];
-
-    //提示层模版
-    gantt.templates.tooltip_text = function(start,end,task){
-        return "<b>任务:</b> "+task.text+"<br/><b>开始时间:</b> " + 
-        gantt.templates.tooltip_date_format(start)+ 
-        "<br/><b>结束时间:</b> "+gantt.templates.tooltip_date_format(end);
-    };
-
-    
-
-
-    // var weekScaleTemplate = function (date) {
-    //     var dateToStr = gantt.date.date_to_str("%d %M");
-    //     var weekNum = gantt.date.date_to_str("(week %W)");
-    //     var endDate = gantt.date.add(gantt.date.add(date, 1, "week"), -1, "day");
-    //     return dateToStr(date) + " - " + dateToStr(endDate) + " " + weekNum(date);
-    // };
-
-    // gantt.config.subscales = [
-    //     {unit: "month", step: 1, date: "%F, %Y"},
-    //     {unit: "week", step: 1, template: weekScaleTemplate}
-
-    // ];
-
-    // gantt.templates.task_cell_class = function (task, date) {
-    //     if (!gantt.isWorkTime(date))
-    //         return "week_end";
-    //     return "";
-    // };
-
-    // Marker
-    var date_to_str = gantt.date.date_to_str(gantt.config.task_date);
-    var today = new Date(2018, 3, 5);
-    gantt.addMarker({
-        start_date: today,
-        css: "today",
-        text: "收款",
-        title: "Today: " + date_to_str(today)
-    });
-
-    var start = new Date(2018, 2, 28);
-    gantt.addMarker({
-        start_date: start,
-        css: "status_line",
-        text: "项目开始",
-        title: "Start project: " + date_to_str(start)
-    });
-
-    gantt.init("gantt_here");
-    gantt.parse(demo_tasks);
-
-    // var tasks = gantt.getTaskByTime();
-    // var links = gantt.getLinks();
-    // console.log('tasks',tasks)
-    // console.log('links',links)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // gantt.config.keyboard_navigation = true;
-        // gantt.config.keyboard_navigation_cells = true;
-
-        // gantt.config.sort = true; //排序
-        // gantt.config.columns = [{
-        //         name: "wbs",
-        //         label: "WBS",
-        //         width: 40,
-        //         template: gantt.getWBSCode
-        //     }, {
-        //         name: "text",
-        //         label: "阶段及工序名称",
-        //         width: "*",
-        //         tree: true
-        //     }, {
-        //         name: "start_date",
-        //         label: "工期",
-        //         align: "center"
-        //     }, {
-        //         name: "duration",
-        //         label: "开始时间",
-        //         align: "center"
-        //     },
-        //     // {name:"add",        label:"",           width:44 }
-        // ];
-        // gantt.init("gantt_here");
-        // gantt.parse(tasks);
-    </script>
 </body>
 </html>
 

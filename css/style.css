@@ -1,0 +1,46 @@
+html, body {
+    height: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+.filter{
+    width:60%;
+    margin:50px auto 0;
+}
+#gantt_here{
+    width:60%;
+    height: 80%;
+    margin:2% auto;
+}
+/*marker线颜色*/
+.status_line { 
+    background-color: #0ca30a;
+}
+.gantt_task_cell.week_end {
+    background-color: #EFF5FD;
+}
+/*项目条颜色*/
+.gantt_task_line.gantt_project{
+    background: #3f5e6f;
+    border:0;
+    box-shadow: none !important;
+}
+.gantt_project .gantt_link_control.task_left {
+    border-width: 8px 5px;
+    border-style: solid;
+    border-color: #3f5e6f hsla(0,0%,100%,0) hsla(0,0%,100%,0) #3f5e6f;
+    left: 0;
+    top: 7px;
+    box-sizing: border-box;
+}
+.gantt_project .gantt_link_control.task_right {
+    border-width: 8px 5px;
+    border-style: solid;
+    border-color: #3f5e6f #3f5e6f hsla(0,0%,100%,0) hsla(0,0%,100%,0);
+    right: 0;
+    top: 7px;
+    box-sizing: border-box;
+}
+.gantt_project .gantt_link_point {
+    display: none !important;
+}
