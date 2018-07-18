@@ -13,8 +13,8 @@ html, body {
     margin:2% auto;
 }
 /*marker线颜色*/
-.status_line { 
-    background-color: #0ca30a;
+.today_line { 
+    background-color: rgba(255,0,0,.4);
 }
 .gantt_task_cell.week_end {
     background-color: #EFF5FD;
@@ -43,4 +43,8 @@ html, body {
 }
 .gantt_project .gantt_link_point {
     display: none !important;
+}
+.state01{
+    background: #ccc;
+    border:#ccc;
 }

@@ -10,16 +10,27 @@
     <script src="codebase/ext/dhtmlxgantt_marker.js"></script>
     <!-- <script src="codebase/ext/dhtmlxgantt_smart_rendering.js"></script> -->
     
-    <!-- my -->
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="filter">
-        <select onchange="fn.startType(this)">
-            <option value="0">周末施工</option>
-            <option value="1">周末不施工</option>
-        </select>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 form-inline">
+                <select onchange="fn.startType(this)" class="form-control">
+                    <option value="0">周末施工</option>
+                    <option value="1">周末不施工</option>
+                </select>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                <span class="label label-success">已完成</span>
+                <span class="label label-danger">超期中</span>
+                <span class="label label-info">进行中</span>
+                <span class="label label-default">未开始</span>
+            </div>
+        </div>
     </div>
+    
     <div id="gantt_here"></div>
     <script src="js/template.js"></script>
     <script src="js/config.js"></script>

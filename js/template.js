@@ -26,11 +26,11 @@ gantt.templates.task_cell_class = function (task, date) {
 };
 
 /**
- * 任务条
+ * 任务条颜色
  */
-// gantt.templates.task_class = function(start, end, task){
-//     if(task.type){
-//         return task.type;
-//     }
-//     return ''
-// };
+gantt.templates.task_class = function(start, end, task){
+    if(new Date(task.start_date)>new Date()){
+        return 'state01';
+    }
+    return ''
+};

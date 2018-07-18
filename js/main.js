@@ -13,12 +13,12 @@ gantt.addMarker({
     title: "Today: " + date_to_str(today)
 });
 
-var start = new Date(2018, 2, 28);
+var start = new Date();
 gantt.addMarker({
     start_date: start,
-    css: "status_line",
-    text: "项目开始",
-    title: "Start project: " + date_to_str(start)
+    css: "today_line",
+    text: "今天",
+    title: "今天"
 });
 
 
