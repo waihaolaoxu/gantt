@@ -1,9 +1,9 @@
 var demo_tasks = {
 	"data":[
 		{"id":11, "text":"和谐家园",type:'project', "open": true},
-		{"id":1, "text":"盛景蓝湾", "start_date":"01-07-2018", "duration":"18", "progress": 0.4,type:'project', "open": false},
+		{"id":1, "text":"盛景蓝湾", "start_date":"01-07-2018", "duration":"18", "progress": 0.4,type:'project', "open": true},
 
-		{"id":2, "text":"Task #1", "start_date":"02-07-2018", "duration":"8", "parent":"1", "progress":0.5, "open": true},
+		{"id":2, "text":"aaaaaaaa", "start_date":"02-07-2018", "duration":"8", "parent":"1", "progress":0.5, "open": true},
 		{"id":3, "text":"Task #2", "start_date":"11-07-2018", "duration":"8", "parent":"1", "progress": 0.6, "open": true},
 		{"id":4, "text":"Task #3", "start_date":"13-07-2018", "duration":"6", "parent":"1", "progress": 0.5, "open": true},
 		{"id":5, "text":"Task #1.1", "start_date":"02-07-2018", "duration":"7", "parent":"2", "progress": 0.6, "open": true},
@@ -28,7 +28,7 @@ var demo_tasks = {
 		{"id":23, "text":"Task #4.3", "start_date":"03-07-2018", "duration":"5", "parent":"15", "progress": 0, "open": true}
 	],
 	"links":[
-		{"id":"1","source":"1","target":"2","type":"1"},
+		{"id":"1","source":"1","target":"2","type":"0"},
 		{"id":"2","source":"2","target":"3","type":"0"},
 		{"id":"3","source":"3","target":"4","type":"0"},
 		{"id":"4","source":"2","target":"5","type":"2"},
@@ -188,4 +188,20 @@ function generateData(count, dateFrom, dateTo){
 
 	}
 	return tasks;
+}
+
+
+
+var data_test = {
+	data:[
+		{"id":1000, "text":"和谐家园",type:'project', "open": true},
+		{"id":1001, "text":"一阶段",type:'project',"parent":"1000", "open": true},
+		{"id":1002, "text":"二阶段",type:'project',"parent":"1000", "open": true},
+		
+		{"id":2, "text":"开工大吉", "start_date":"02-07-2018", "duration":"4", "parent":"1001","open": true},
+		{"id":3, "text":"墙体改造", "start_date":"10-07-2018", "duration":"8", "parent":"1001","open": true},
+
+		{"id":4, "text":"开工大吉", "start_date":"11-07-2018", "duration":"4", "parent":"1002","open": true},
+		{"id":5, "text":"墙体改造", "start_date":"13-07-2018", "duration":"8", "parent":"1002","open": true}
+	]
 }

@@ -19,10 +19,21 @@ gantt.templates.lightbox_header = function(start_date,end_date,task){
 /**
  * 周末底色设置
  */
-gantt.templates.task_cell_class = function (task, date) {
-    if (!gantt.isWorkTime(date))
-        return "week_end";
-    return "";
+// gantt.templates.task_cell_class = function (task, date) {
+//     if (!gantt.isWorkTime(date))
+//         return "week_end";
+//     return "";
+// };
+// gantt.templates.scale_cell_class = function(date){
+//     if(date.getDay()==0||date.getDay()==6){
+//         return "week_end";
+//     }
+//     return '';
+// };
+gantt.templates.task_cell_class = function (item, date) {
+    if (date.getDay() == 0 || date.getDay() == 6) {
+        return "week_end"
+    }
 };
 
 /**

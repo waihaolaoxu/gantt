@@ -23,7 +23,7 @@ gantt.addMarker({
 
 
 gantt.init("gantt_here");
-gantt.parse(demo_tasks);
+gantt.parse(data_test);
 
 // var tasks = gantt.getTaskByTime();
 // var links = gantt.getLinks();

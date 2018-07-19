@@ -5,18 +5,19 @@ html, body {
 }
 .filter{
     width:60%;
-    margin:50px auto 0;
+    padding:50px 0 20px;
+    margin:0 auto;
 }
 #gantt_here{
-    width:60%;
-    height: 80%;
-    margin:2% auto;
+    width:90%;
+    height: 70%;
+    margin:0 auto;
 }
 /*marker线颜色*/
 .today_line { 
     background-color: rgba(255,0,0,.4);
 }
-.gantt_task_cell.week_end {
+.gantt_task_cell.week_end{
     background-color: #EFF5FD;
 }
 /*项目条颜色*/
