@@ -49,3 +49,6 @@ html, body {
     background: #ccc;
     border:#ccc;
 }
+.gantt_grid_data .iconfont{
+    margin:0 5px;
+}

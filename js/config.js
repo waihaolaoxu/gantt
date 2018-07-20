@@ -22,3 +22,23 @@ gantt.config.subscales = [
         return 0 == e.getDay() || 6 == e.getDay() ? ("<div class='weekend-flag-box' style='background: #EFF5FD;line-height: 23px;'>" + e.getDate() + "<div class='weekend-shadow'></div></div>") : e.getDate();
     }}
 ];
+gantt.config.columns = [
+    // { name: "wbs", label: "WBS", width: 40, template:function(e){
+    //     // console.log(e.id)
+    // }},
+    { name: "text", label: "阶段及工序名称", width: "160", tree: true,resize:true},
+    {
+        name: "add22",
+        label: "",
+        width: 30,
+        template: function (e) {
+            if(1 == e.$level){
+                return '<div class="gantt_add" title="增加工序" ><span class="bv-add-btn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>'
+            }
+            return '';
+        }
+    },
+    { name: "start_date", label: "开始时间", width:'80', align: "center" },
+    { name: "duration", label: "天数", align: "center" },
+    // {name:"add",label:"操作"}
+];

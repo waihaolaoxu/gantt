@@ -45,3 +45,14 @@ gantt.templates.task_class = function(start, end, task){
     }
     return ''
 };
+//左侧列表图标
+gantt.templates.grid_folder = function(e){
+    console.log(e)
+    if(e.$level === 0){
+        return '<i class="iconfont icon-ziyuan"></i>';
+    }else if(e.$level === 1){
+        return '<i class="iconfont icon-weixiu"></i>';
+    }else{
+        return '<i class="iconfont icon-woderenwu"></i>';
+    }
+}
