@@ -1,6 +1,8 @@
 /**
  * 配置
  */
+// gantt.config.readonly = true;//只读模式
+gantt.config.static_background = true;
 gantt.config.show_progress = false;//是否显示进度
 gantt.config.work_time = false;//是否只在工作日施工
 gantt.config.correct_work_time = true;//工作日

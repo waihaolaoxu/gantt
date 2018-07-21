@@ -166,7 +166,7 @@ gantt.locale={
 		years: "年",
 
 		/* message popup */
-		message_ok: "OK",
+		message_ok: "确定",
 		message_cancel: "关闭"
 	}
 };
