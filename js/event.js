@@ -35,7 +35,7 @@ gantt.attachEvent("onTaskDblClick", function (id, e) {
  * 任务拖动逻辑处理
  * 拖动只级联右侧关联的，前面的判断间隔，如果不满足直接退回
  */
-function taskNextReset(task){
+function taskNextReset(task,oldTask){ //可以用old还原
      var startdate = new Date(task.end_date.getTime()+1000*60*60*24);
      task.$source.forEach(function(linkId,index){
         var nextId = gantt.getLink(linkId).target;//下一个task id
@@ -55,7 +55,7 @@ function taskNextReset(task){
 gantt.attachEvent("onBeforeTaskChanged", function(id, mode, task){
     console.log(task,task.$source,task.$target);
     setTimeout(function(){
-        taskNextReset(gantt.getTask(id));
+        taskNextReset(gantt.getTask(id),task);
     },100)
     return true;
 });
