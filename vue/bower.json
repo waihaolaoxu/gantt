@@ -1,0 +1,20 @@
+{
+  "name": "vuedemo",
+  "description": "后台模版 Vue+ElementUI",
+  "main": "",
+  "authors": [
+    "前端老徐 <442413729@qq.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "animate.css": "^2.0.0"
+  }
+}

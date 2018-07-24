@@ -1,0 +1,140 @@
+/*
+* @Author: qdlaoxu
+* @Date:   2017-10-26 10:05:05
+ * @Last Modified by: 严浩韦
+ * @Last Modified time: 2018-03-22 11:18:52
+*/
+
+/**
+ * 主色
+ * 主要品牌颜色是鲜艳、友好的蓝色。
+*/
+$blue:#409EFF;
+
+/**
+ * 辅助色
+ * 除了主色外的场景色，需要在不同的场景中使用（例如危险色表示危险的操作）。
+*/
+$success:#67C23A;
+$warning:#EB9E05;
+$danger:#FA5555;
+$info:#878D99;
+
+/**
+ * 中性色
+ * 中中性色用于文本、背景和边框颜色。通过运用不同的中性色，来表现层次结构。
+*/
+$text-1:#2D2F33; //主要文字
+$text-2:#5A5E66; //常规文字
+$text-3:#878D99; //次要文字
+$text-4:#B4BCCC; //占位文字
+$border-1:#D8DCE5; //一级边框
+$border-2:#DFE4ED; //二级边框
+$border-3:#E6EBF5; //三级边框
+$border-4:#EDF2FC; //四级边框
+
+
+//便于循环编写css 目前没有找到更好的办法
+$color:( "primary":#e5493a, // 主题颜色
+"primary2":#840b0b, //底部报名条背景颜色
+"title":#363636, // 标题色
+"sub":#959595, //副标题色
+"content":#252525, //文字内容色
+"grey":#ccc,
+"white":#fff, //白色
+"black":#000, //黑色
+"bg":#252525, //背景颜色
+"bgLight":#363636, //稍浅背景颜色
+"greyBg":#fafafa, //浅色背景颜色
+"greyDark":#f2f2f2,
+"border":#e1e1e1,
+"borderLight":#f3f3f3,
+"success":#57c90c,
+"error":#ff4048);
+@function color($n) {
+    @return map-get($color,$n);
+}
+
+
+//transition
+@mixin tran($a:all, $b:ease, $c:.3s,$d:0s) {
+    transition: $a $b $c $d;
+    -moz-transition: $a $b $c $d;
+    -webkit-transition:$a $b $c $d;
+}
+
+//animation
+@mixin animation($a){
+	animation:$a;
+    -moz-animation:$a;
+    -webkit-animation:$a;
+
+}
+//border
+@mixin radius($a){
+    width: $a;
+	height: $a;
+    border-radius: 50%;
+}
+//transform
+@mixin transform($a) {
+    transform: $a;
+    -moz-transform: $a;
+    -webkit-transform: $a;
+    -ms-transform: $a;
+}
+
+//opacity
+@mixin opacity($a) {
+    opacity: $a;
+    filter:alpha(opacity=$a*100);
+}
+
+@mixin line_over($num:2) {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $num;
+}
+
+@mixin center($w){
+    width:$w+px;
+    position: absolute;
+    left:50%;
+    margin-left:-$w/2+px;
+
+}
+@mixin h_middle($a){
+    height:$a;
+    line-height: $a;
+}
+@mixin circle($a){
+    width:$a;
+    height:$a;
+    border-radius: 50%;
+}
+@mixin fang($a){
+    width:$a;
+    height:$a;
+}
+@mixin fang_c($a){
+    width:$a;
+    height:$a;
+    line-height: $a;
+    text-align: center;
+}
+@mixin circle_m($a){
+    width:$a;
+    height:$a;
+    border-radius: 50%;
+    text-align: center;
+    line-height: $a;
+}
+@mixin gradient($a,$b){
+  background:#000; /* 一些不支持背景渐变的浏览器 */
+  background:-moz-linear-gradient(top, $a, $b);
+  background:-webkit-gradient(linear, 0 0, 0 bottom, from($a), to($b));
+  background:-o-linear-gradient(top, $a, $b);
+}
