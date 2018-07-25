@@ -1,29 +1,82 @@
 var ganttFn = {
     init: function (opt) {
-        gantt.init(opt.id);
-
         this._isPattern = opt.isPattern;
         this._date = new Date();
         
-        this._config();
-        this._event();
         this._template();
+        this._event();
+        this._config();
         
+        gantt.init(opt.id);
         gantt.parse(opt.data);
+        this.__config(); //这里存放的是必须为init后配置才生效的
+        this.fitTasks();
     },
+    // 获取一条线上的蚂蚱
+    getConnectedGroup:function(id){
+        var data = {
+            tasks_left:[],
+            tasks_right:[]
+        }
+        function _eachPre(task){ //遍历下一个link
+            task.$source.forEach(function (linkId, index) {
+                var nextId = gantt.getLink(linkId).target; //下一个task id
+                var nextTask = gantt.getTask(nextId); //下一个task
+                if (nextTask.$source.length) {
+                    nextTask.$source.forEach(function (linkId, index) {
+                        _eachPre(gantt.getTask(gantt.getLink(linkId).target)); //递归
+                    });
+                }
+                data.tasks_right.push(nextId);
+            });
+        }
+        function _eachNext(task){ //遍历下上个link
+            task.$target.forEach(function (linkId, index) {
+                var nextId = gantt.getLink(linkId).source; //上一个task id
+                var nextTask = gantt.getTask(nextId); //上一个task
+                if (nextTask.$target.length) {
+                    nextTask.$target.forEach(function (linkId, index) {
+                        _eachNext(gantt.getTask(gantt.getLink(linkId).source)); //递归
+                    });
+                }
+                data.tasks_left.push(nextId);
+            });
+        }
+        _eachPre(gantt.getTask(id));
+        _eachNext(gantt.getTask(id));
+        return data;
+    },
+    // 自适应 二级 task
+    fitTasks:function(){
+        gantt.eachTask(function(task){
+            var dates = gantt.getSubtaskDates(task.id);
+            if(task.$level===1 && dates.start_date && dates.end_date){
+                task.start_date = dates.start_date;
+                task.end_date = dates.end_date;
+                gantt.updateTask(task.id);
+            }
+        })
+    },
+    //日期改成自然数
     _getDayNum:function(e){
         return Math.ceil((e - gantt.getState().min_date)/(1000*60*60*24))+1
     },
+    // 配置信息（init后生效的）
+    __config:function(){
+        if(this._isPattern){ //date_scale 二者只能有一个 否则就会失效
+            gantt.templates.date_scale = function (e) {
+                return '模板'
+            }
+        }else{
+            gantt.config.date_scale = "%Y年 %F";
+        }
+    },
+    // 配置信息
     _config: function () {
         var _self = this;
         // gantt.config.readonly = true;//只读模式
-        if(_self._isPattern){
-            // setTimeout(() => {
-            //     gantt.config.start_date = gantt.getState().min_date;
-            //     gantt.config.end_date = gantt.calculateEndDate(gantt.getState().max_date, 2);
-            // }, 100);
-        }
-        gantt.config.static_background = true;
+        gantt.config.order_branch = true; //启用拖动
+        gantt.config.order_branch_free = false; //禁止二级拖进三级
         gantt.config.show_progress = false; //是否显示进度
         gantt.config.work_time = false; //是否只在工作日施工
         gantt.config.correct_work_time = true; //工作日
@@ -52,13 +105,6 @@ var ganttFn = {
         ];
         gantt.config.scale_height = 50;
         gantt.config.scale_unit = "month";
-        if(_self._isPattern){ //date_scale 二者只能有一个 否则就会失效
-            gantt.templates.date_scale = function (e) {
-                return ''
-            }
-        }else{
-            gantt.config.date_scale = "%Y年 %F";
-        }
         gantt.config.subscales = [{
             unit: "day",
             step: 1,
@@ -120,9 +166,14 @@ var ganttFn = {
             })
         }
     },
+    // 模版配置
     _template: function () {
+        var _self = this;
         // 提示层模版
         gantt.templates.tooltip_text = function (start, end, task) {
+            if(_self._isPattern){
+                return "";
+            }
             return "<b>任务:</b> " + task.text + "<br/><b>开始时间:</b> " +
                 gantt.templates.tooltip_date_format(start) +
                 "<br/><b>结束时间:</b> " + gantt.templates.tooltip_date_format(end);
@@ -185,6 +236,7 @@ var ganttFn = {
             return 'gantt_bv_task'
         }
     },
+    // 事件
     _event: function () {
         var _self = this;
 
@@ -193,60 +245,95 @@ var ganttFn = {
             return false;
         });
 
-        // 任务拖动逻辑处理、拖动只级联右侧关联的，前面的判断间隔，如果不满足直接退回
-        function taskNextReset(task, oldTask) { //可以用old还原
-            var startdate = new Date(task.end_date.getTime() + 1000 * 60 * 60 * 24);
-            task.$source.forEach(function (linkId, index) {
-                var nextId = gantt.getLink(linkId).target; //下一个task id
-                var nextTask = gantt.getTask(nextId); //下一个task
-                var enddate = gantt.calculateEndDate(startdate, nextTask.duration);
-                nextTask.end_date = enddate;
-                nextTask.start_date = startdate;
-                gantt.updateTask(nextId);
-                if (nextTask.$source.length) {
-                    task.$source.forEach(function (linkId, index) {
-                        taskNextReset(gantt.getTask(gantt.getLink(linkId).target)); //递归
-                    });
-                }
-            })
-        }
+        // // 任务拖动逻辑处理、拖动只级联右侧关联的，前面的判断间隔，如果不满足直接退回
+        // function taskNextReset(task, oldTask) { //可以用old还原
+        //     var startdate = new Date(task.end_date.getTime() + 1000 * 60 * 60 * 24);
+        //     task.$source.forEach(function (linkId, index) {
+        //         var nextId = gantt.getLink(linkId).target; //下一个task id
+        //         var nextTask = gantt.getTask(nextId); //下一个task
+        //         var enddate = gantt.calculateEndDate(startdate, nextTask.duration);
+        //         nextTask.end_date = enddate;
+        //         nextTask.start_date = startdate;
+        //         gantt.updateTask(nextId);
+        //         if (nextTask.$source.length) {
+        //             nextTask.$source.forEach(function (linkId, index) {
+        //                 taskNextReset(gantt.getTask(gantt.getLink(linkId).target)); //递归
+        //             });
+        //         }
+        //     })
+        // }
+        // gantt.attachEvent("onBeforeTaskChanged", function (id, mode, task) {
+        //     // console.log(task, task.$source, task.$target);
+        //     setTimeout(function () {
+        //         taskNextReset(gantt.getTask(id), task);
+        //     }, 100)
+        //     return true;
+        // });
+
+        // 拖动级联子级
         gantt.attachEvent("onBeforeTaskChanged", function (id, mode, task) {
-            // console.log(task, task.$source, task.$target);
-            setTimeout(function () {
-                taskNextReset(gantt.getTask(id), task);
-            }, 100)
+            var oldDate = task.start_date
+            if(task.$level===1){
+                setTimeout(function(){
+                    var newDate = gantt.getTask(id).start_date;
+                    gantt.eachTask(function (task) {
+                        if(task.parent === id){
+                            var sdate = new Date(task.start_date.getTime()+(newDate-oldDate));
+                            var edate = gantt.calculateEndDate(sdate, task.duration);
+                            task.start_date = sdate;
+                            task.end_date = edate;
+                        }
+                    });
+                },100);
+            }else if(task.$level === 2){
+                setTimeout(function(){
+                    // 不满足条件还原
+                    var newTask = gantt.getTask(id),newDate = newTask.start_date,flag = true;
+                    _self.getConnectedGroup(id).tasks_left.forEach(function(id,index){
+                        var pretask = gantt.getTask(id);
+                        if(flag && newDate < pretask.end_date){
+                            newTask.start_date = task.start_date;
+                            newTask.end_date = task.end_date;
+                            flag = false;
+                            gantt.message('工序《'+task.text+'》的起始时间必须晚于其前驱工序的结束时间。');
+                        }
+                    });
+                    //自动移动右侧task
+                    if(flag){
+                        _self.getConnectedGroup(id).tasks_right.forEach(function(id,index){
+                            var task = gantt.getTask(id);
+                            var sdate = new Date(task.start_date.getTime()+(newDate-oldDate));
+                            var edate = gantt.calculateEndDate(sdate, task.duration);
+                            task.start_date = sdate;
+                            task.end_date = edate;
+                            gantt.updateTask(id);
+                        });
+                        //更新pre task
+                        _self.fitTasks();
+                    }
+                },100);
+            }
             return true;
         });
 
-        // 拖动任务后
+        // 拖动任务后 无限加载
         gantt.attachEvent("onAfterTaskDrag", function(id,mode,e){
-            var range = gantt.getSubtaskDates();
-            var scaleUnit = gantt.getState().scale_unit;
-            if(range.start_date && range.end_date){
-                // 拖动无限加载
-                var num = -4;
-                if(_self._isPattern){
-                    num = 0;
+            setTimeout(() => {
+                var range = gantt.getSubtaskDates();
+                var scaleUnit = gantt.getState().scale_unit;
+                if(range.start_date && range.end_date){
+                    var num = -4;
+                    if(_self._isPattern){
+                        num = 0;
+                    }
+                    gantt.config.start_date = gantt.calculateEndDate(range.start_date, num, scaleUnit);
+                    gantt.config.end_date = gantt.calculateEndDate(range.end_date, 5, scaleUnit);
+                    gantt.render();
                 }
-                gantt.config.start_date = gantt.calculateEndDate(range.start_date, num, scaleUnit);
-                gantt.config.end_date = gantt.calculateEndDate(range.end_date, 5, scaleUnit);
-                
-                // 实现子任务拖动自动调整父任务的起始结束时间
-                if(_self._isPattern){
-                    var preTaskId = gantt.getParent(id);
-                    var preTask = gantt.getTask(preTaskId);
-                    var dates = gantt.getSubtaskDates(preTaskId);
-                    // var dateToStr = gantt.templates.task_date;
-                    // console.log(dateToStr(dates.start_date) + " - " + dateToStr(dates.end_date));
-                    preTask.start_date = dates.start_date;
-                    preTask.end_date = dates.end_date;
-                    gantt.updateTask(preTaskId);
-                }
-                gantt.render();
-            }
+            }, 200);
          });
 
-        // 鼠标右键
+        // 鼠标右键 菜单
         gantt.attachEvent("onContextMenu", function (taskId, linkId, event) {
             var x = event.clientX+document.body.scrollLeft+document.documentElement.scrollLeft,
                 y = event.clientY+document.body.scrollTop+document.documentElement.scrollTop;
@@ -276,6 +363,11 @@ var ganttFn = {
             }else{
                 return false;
             }
+        });
+
+        // 排序
+        gantt.attachEvent('onRowDragEnd',function(id, target){
+            _self.fitTasks();
         });
     }
 }
